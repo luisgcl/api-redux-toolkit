@@ -4,7 +4,7 @@ import { urlBase } from "../../../helpers/config";
 
 const initialState = {
   dataDigimon: [],
-  dataDigimonFilter: [],
+  digimonFiltrados: [],
   loading: false,
 };
 
@@ -14,9 +14,14 @@ export const digimonSlice = createSlice({
   reducers: {
     setDataDigimon: (state, action) => {
       state.dataDigimon = action.payload;
+      state.digimonFiltrados = action.payload;
     },
     setDataDigimonFilter: (state, action) => {
-      state.dataDigimonFilter = action.payload;
+      //filtrar a los digimons por nombre
+      const nombre = action.payload;
+      const digimon = state.digimonFiltrados
+      const filtrados = digimon.filter((digimon) => digimon.name.toLowerCase().includes(nombre.toLowerCase()));
+      state.dataDigimon = filtrados;
     },
   },
 });
@@ -26,7 +31,6 @@ export const getDigimon = () => async (dispatch) => {
   const { data } = await axios.get(`${urlBase}api/digimon`);
 
   dispatch(setDataDigimon(data));
-  dispatch(setDataDigimonFilter(data));
   //   console.log(data);
 };
 
